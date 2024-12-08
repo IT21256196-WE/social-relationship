@@ -1,0 +1,5 @@
+OPENAI_API_KEY = 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
+MONGO_URI = mongodb+srv://rashiamarasiri:XD2k1EO3FhUXdmuU@research-project-db.cvsnz.mongodb.net/?retryWrites=true&w=majority&appName=Research-project-db
+DB_NAME = child_learning
+PYTHONPATH=.
+TOKENIZERS_PARALLELISM=false
