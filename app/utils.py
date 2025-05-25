@@ -1,4 +1,4 @@
-import random
+import json
 import openai
 from config import OPENAI_API_KEY
 
@@ -48,13 +48,13 @@ def generate_dynamic_content(scenario, difficulty):
         f"You are an expert in child education. "
         f"Create 5 multiple-choice questions for a story about '{scenario}'. "
         f"Each question should be simple, direct, and suitable for children, with only four answer options. "
-        f"Return the questions and answers as a JSON array of objects, each object containing: "
-        f"'question' (string), 'options' (a list of two strings), and 'answer' (the correct option, as a single word from the options). "
-        f"Do not include explanations or extra formatting. "
-        f"Example format: "
-        f"[{{'question': 'What color is the sky?', 'options': ['blue', 'green', 'red', 'yellow'], 'answer': 'blue'}}, ...]"
+        f"Return the questions and answers as a JSON array of objects, using double quotes for all keys and string values. "
+        f"Each object must contain: "
+        f'"question" (string), "options" (a list of two strings), and "answer" (the correct option, as a single word from the options). '
+        f"Do not include explanations, code blocks, or extra formatting. Only output the JSON array."
+        f' Example: [{"question": "What color is the sky?", "options": ["blue", "green", "yellow", "red"], "answer": "blue"}]'
     )
-    mcqs = openai.chat.completions.create(
+    mcqs_response = openai.chat.completions.create(
         model="gpt-4",
         messages=[
             {"role": "system", "content": "You are a helpful assistant."},
@@ -63,15 +63,24 @@ def generate_dynamic_content(scenario, difficulty):
         max_tokens=400
     ).choices[0].message.content.strip()
 
+    try:
+        mcqs = json.loads(mcqs_response)
+    except Exception:
+        mcqs = mcqs_response
+
     return image_urls, story, mcqs
 
 # Load vectorizer for processing
+
+
 def load_vectorizer():
     import pickle
     with open("ml/models/vectorizer.pkl", "rb") as f:
         return pickle.load(f)
 
 # Load PyTorch model
+
+
 def load_difficulty_model():
     import torch
     from app.models import DifficultyRegressor
