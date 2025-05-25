@@ -46,9 +46,13 @@ def generate_dynamic_content(scenario, difficulty):
     # Improved MCQ prompt
     mcq_prompt = (
         f"You are an expert in child education. "
-        f"Create multiple-choice questions (with 2 options each) for a story about '{scenario}'. "
-        f"Questions should match difficulty level {difficulty}, test comprehension, and encourage critical thinking. "
-        f"Provide clear, concise questions and plausible options."
+        f"Create 5 multiple-choice questions for a story about '{scenario}'. "
+        f"Each question should be simple, direct, and suitable for children, with only four answer options. "
+        f"Return the questions and answers as a JSON array of objects, each object containing: "
+        f"'question' (string), 'options' (a list of two strings), and 'answer' (the correct option, as a single word from the options). "
+        f"Do not include explanations or extra formatting. "
+        f"Example format: "
+        f"[{{'question': 'What color is the sky?', 'options': ['blue', 'green', 'red', 'yellow'], 'answer': 'blue'}}, ...]"
     )
     mcqs = openai.chat.completions.create(
         model="gpt-4",
