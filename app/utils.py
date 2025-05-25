@@ -2,15 +2,22 @@ import random
 import openai
 from config import OPENAI_API_KEY
 
-# OpenAI API setup
 openai.api_key = OPENAI_API_KEY
 
-# Generate dynamic content
+
 def generate_dynamic_content(scenario, difficulty):
-    # Generate steps using DALL-E
+    # Improved DALL-E prompt
     image_urls = []
-    for step in range(1,5):
-        dalle_prompt = f"Think you are an visual intepreter to a kid to tell how a social scenario goes and that scenario have four steps. And remember when you generating this images there are difficulty level of such children. Create an image for the scenario '{scenario}' at difficulty level {difficulty}, step {step}."
+    for step in range(1, 5):
+        dalle_prompt = (
+            f"You are an expert visual storyteller for children. "
+            f"Create a highly detailed, child-friendly illustration for the scenario: '{scenario}'. "
+            f"This scenario should be broken into four logical steps, each step representing a key moment in the scenario. "
+            f"Generate the image for step {step} at difficulty level {difficulty}. "
+            f"Consider the cognitive and emotional needs of children at this difficulty level. "
+            f"Make the image engaging, clear, and supportive of learning. "
+            f"Include context, characters, and actions relevant to the scenario and step."
+        )
         dalle_response = openai.images.generate(
             model="dall-e-3",
             prompt=dalle_prompt,
@@ -18,29 +25,38 @@ def generate_dynamic_content(scenario, difficulty):
             quality="standard",
             n=1,
         )
-        print(dalle_response)
         image_urls.append(dalle_response.data[0].url)
 
-    # Generate story using GPT-4
-    story_prompt = f"Write a simple story for a child on the topic '{scenario}' at difficulty level {difficulty}."
+    # Improved story prompt
+    story_prompt = (
+        f"You are a master children's storyteller and educator. "
+        f"Write a vivid, engaging, and age-appropriate story for a child about the scenario '{scenario}'. "
+        f"Adapt the language, complexity, and emotional tone to difficulty level {difficulty}. "
+        f"Ensure the story is instructive, supportive, and helps the child understand the scenario step by step."
+    )
     story = openai.chat.completions.create(
         model="gpt-4",
         messages=[
             {"role": "system", "content": "You are a helpful assistant."},
             {"role": "user", "content": story_prompt}
         ],
-        max_tokens=150
+        max_tokens=400
     ).choices[0].message.content.strip()
 
-    # Generate MCQs using GPT-4
-    mcq_prompt = f"Create difficulty level of {difficulty} and multiple-choice questions (with 2 options) for a story about '{scenario}'."
+    # Improved MCQ prompt
+    mcq_prompt = (
+        f"You are an expert in child education. "
+        f"Create multiple-choice questions (with 2 options each) for a story about '{scenario}'. "
+        f"Questions should match difficulty level {difficulty}, test comprehension, and encourage critical thinking. "
+        f"Provide clear, concise questions and plausible options."
+    )
     mcqs = openai.chat.completions.create(
         model="gpt-4",
         messages=[
             {"role": "system", "content": "You are a helpful assistant."},
             {"role": "user", "content": mcq_prompt}
         ],
-        max_tokens=200
+        max_tokens=400
     ).choices[0].message.content.strip()
 
     return image_urls, story, mcqs

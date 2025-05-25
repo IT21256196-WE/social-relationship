@@ -26,10 +26,18 @@ class DifficultyRegressor(nn.Module):
         x = self.fc3(x)
         return x
 
-# Emotion Analysis Input Model
 class EmotionAnalysisInput(BaseModel):
     caretaker_input: str
     current_difficulty: float
+
+class CreateChildInput(BaseModel):
+    child_id: str
+    difficulty: float
+
+class PredictDifficultyInput(BaseModel):
+    child_id: str
+    caretaker_input: str
+    accuracy: float
 
 
 # Load the PyTorch model
