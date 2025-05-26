@@ -46,7 +46,7 @@ def generate_dynamic_content(scenario, difficulty):
     # Improved MCQ prompt
     mcq_prompt = (
         f"You are an expert in child education. "
-        f"Create 5 multiple-choice questions for a story about '{scenario}'. "
+        f"Create 5 multiple-choice questions for a story about the following scenario: '{scenario}'. "
         f"Each question should be simple, direct, and suitable for children, with only four answer options. "
         f"Return the questions and answers as a JSON array of objects, using double quotes for all keys and string values. "
         f"Each object must contain: "
@@ -75,14 +75,14 @@ def generate_asd_visual_steps(scenario, difficulty=1):
     image_urls = []
     for step in range(1, 5):
         dalle_prompt = (
-            f"You are a world-class visual educator for children with autism spectrum disorder (ASD). "
+            f"You are a world-class visual educator for children. "
             f"Your task is to create a clear, simple, and visually structured illustration for the scenario: '{scenario}'. "
             f"Break the scenario into four logical, easy-to-understand steps. "
             f"This is step {step}. "
             f"Use minimal distractions, clear backgrounds, and focus on the main action. "
             f"Characters should have clear facial expressions and body language. "
             f"Use high contrast and bright, friendly colors. "
-            f"Make the image supportive for children with ASD at difficulty level {difficulty}."
+            f"Make the image supportive for children at difficulty level {difficulty}."
         )
         try:
             dalle_response = openai.images.generate(
