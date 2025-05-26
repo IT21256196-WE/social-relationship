@@ -52,7 +52,7 @@ def generate_dynamic_content(scenario, difficulty):
         f"Each object must contain: "
         f'"question" (string), "options" (a list of two strings), and "answer" (the correct option, as a single word from the options). '
         f"Do not include explanations, code blocks, or extra formatting. Only output the JSON array."
-        f' Example: [{"question": "What color is the sky?", "options": ["blue", "green", "yellow", "red"], "answer": "blue"}]'
+        f' Example: [{{"question": "What color is the sky?", "options": ["blue", "green", "yellow", "red"], "answer": "blue"}}]'
     )
     mcqs_response = openai.chat.completions.create(
         model="gpt-4",
