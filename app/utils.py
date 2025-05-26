@@ -8,7 +8,7 @@ openai.api_key = OPENAI_API_KEY
 def generate_dynamic_content(scenario, difficulty):
     # Improved DALL-E prompt
     image_urls = []
-    for step in range(1, 5):
+    for step in range(1, 3):
         dalle_prompt = (
             f"You are an expert visual storyteller for children. "
             f"Create a highly detailed, child-friendly illustration for the scenario: '{scenario}'. "
