@@ -84,14 +84,18 @@ def generate_asd_visual_steps(scenario, difficulty=1):
             f"Use high contrast and bright, friendly colors. "
             f"Make the image supportive for children with ASD at difficulty level {difficulty}."
         )
-        dalle_response = openai.images.generate(
-            model="dall-e-3",
-            prompt=dalle_prompt,
-            size="1024x1024",
-            quality="standard",
-            n=1,
-        )
-        image_urls.append(dalle_response.data[0].url)
+        try:
+            dalle_response = openai.images.generate(
+                model="dall-e-3",
+                prompt=dalle_prompt,
+                size="1024x1024",
+                quality="standard",
+                n=1,
+            )
+            image_urls.append(dalle_response.data[0].url)
+        except openai.OpenAIError as e:
+            print(f"Error generating image for step {step}: {e}")
+            image_urls.append(None)
     return image_urls
 
 
