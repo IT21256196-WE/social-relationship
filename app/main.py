@@ -2,7 +2,8 @@ import os
 from fastapi import FastAPI, HTTPException
 from app.services import process_scenario, predict_and_update_difficulty
 from app.database import save_child, get_child, update_difficulty
-from app.models import EmotionAnalysisInput, CreateChildInput, PredictDifficultyInput
+from app.models import EmotionAnalysisInput, CreateChildInput, PredictDifficultyInput, ScenarioInput
+from app.utils import generate_asd_visual_steps
 from fastapi.middleware.cors import CORSMiddleware
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
@@ -50,6 +51,14 @@ async def predict_and_update_difficulty_api(input: PredictDifficultyInput):
         new_difficulty = predict_and_update_difficulty(
             input.child_id, input.caretaker_input, input.accuracy)
         return {"child_id": input.child_id, "new_difficulty": new_difficulty}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@app.post("/visualize_scenario_for_asd")
+async def visualize_scenario_for_asd(input: ScenarioInput):
+    try:
+        image_urls = generate_asd_visual_steps(input.scenario, input.difficulty)
+        return {"steps": image_urls}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

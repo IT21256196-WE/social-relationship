@@ -39,6 +39,9 @@ class PredictDifficultyInput(BaseModel):
     caretaker_input: str
     accuracy: float
 
+class ScenarioInput(BaseModel):
+    scenario: str
+    difficulty: float = 1
 
 # Load the PyTorch model
 model_path = "ml/models/difficulty_model.pth"

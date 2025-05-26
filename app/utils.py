@@ -70,17 +70,39 @@ def generate_dynamic_content(scenario, difficulty):
 
     return image_urls, story, mcqs
 
+
+def generate_asd_visual_steps(scenario, difficulty=1):
+    image_urls = []
+    for step in range(1, 5):
+        dalle_prompt = (
+            f"You are a world-class visual educator for children with autism spectrum disorder (ASD). "
+            f"Your task is to create a clear, simple, and visually structured illustration for the scenario: '{scenario}'. "
+            f"Break the scenario into four logical, easy-to-understand steps. "
+            f"This is step {step}. "
+            f"Use minimal distractions, clear backgrounds, and focus on the main action. "
+            f"Characters should have clear facial expressions and body language. "
+            f"Use high contrast and bright, friendly colors. "
+            f"Make the image supportive for children with ASD at difficulty level {difficulty}."
+        )
+        dalle_response = openai.images.generate(
+            model="dall-e-3",
+            prompt=dalle_prompt,
+            size="1024x1024",
+            quality="standard",
+            n=1,
+        )
+        image_urls.append(dalle_response.data[0].url)
+    return image_urls
+
+
 # Load vectorizer for processing
-
-
 def load_vectorizer():
     import pickle
     with open("ml/models/vectorizer.pkl", "rb") as f:
         return pickle.load(f)
 
+
 # Load PyTorch model
-
-
 def load_difficulty_model():
     import torch
     from app.models import DifficultyRegressor
